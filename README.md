@@ -1,563 +1,169 @@
-<div align="center">
-  <img src="resources/mmdet3d-logo.png" width="600"/>
-  <div>&nbsp;</div>
-  <div align="center">
-    <b><font size="5">OpenMMLab website</font></b>
-    <sup>
-      <a href="https://openmmlab.com">
-        <i><font size="4">HOT</font></i>
-      </a>
-    </sup>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <b><font size="5">OpenMMLab platform</font></b>
-    <sup>
-      <a href="https://platform.openmmlab.com">
-        <i><font size="4">TRY IT OUT</font></i>
-      </a>
-    </sup>
-  </div>
-  <div>&nbsp;</div>
+# BEVFusion Distillation Training Workflow
 
-[![PyPI](https://img.shields.io/pypi/v/mmdet3d)](https://pypi.org/project/mmdet3d)
-[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmdetection3d.readthedocs.io/en/latest/)
-[![badge](https://github.com/open-mmlab/mmdetection3d/workflows/build/badge.svg)](https://github.com/open-mmlab/mmdetection3d/actions)
-[![codecov](https://codecov.io/gh/open-mmlab/mmdetection3d/branch/main/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmdetection3d)
-[![license](https://img.shields.io/github/license/open-mmlab/mmdetection3d.svg)](https://github.com/open-mmlab/mmdetection3d/blob/main/LICENSE)
-[![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmdetection3d.svg)](https://github.com/open-mmlab/mmdetection3d/issues)
-[![issue resolution](https://isitmaintained.com/badge/resolution/open-mmlab/mmdetection3d.svg)](https://github.com/open-mmlab/mmdetection3d/issues)
+When you run the training script (final_working_distillation.py), here's the execution flow:
 
-[📘Documentation](https://mmdetection3d.readthedocs.io/en/latest/) |
-[🛠️Installation](https://mmdetection3d.readthedocs.io/en/latest/get_started.html) |
-[👀Model Zoo](https://mmdetection3d.readthedocs.io/en/latest/model_zoo.html) |
-[🆕Update News](https://mmdetection3d.readthedocs.io/en/latest/notes/changelog.html) |
-[🚀Ongoing Projects](https://github.com/open-mmlab/mmdetection3d/projects) |
-[🤔Reporting Issues](https://github.com/open-mmlab/mmdetection3d/issues/new/choose)
+## 1. Initialization Phase
 
-</div>
+```python
+# First, the main function is called
+def main():
+    # Parse arguments and setup
 
-<div align="center">
-
-English | [简体中文](README_zh-CN.md)
-
-</div>
-
-<div align="center">
-  <a href="https://openmmlab.medium.com/" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/219255827-67c1a27f-f8c5-46a9-811d-5e57448c61d1.png" width="3%" alt="" /></a>
-  <img src="https://user-images.githubusercontent.com/25839884/218346358-56cc8e2f-a2b8-487f-9088-32480cceabcf.png" width="3%" alt="" />
-  <a href="https://discord.com/channels/1037617289144569886/1046608014234370059" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/218347213-c080267f-cbb6-443e-8532-8e1ed9a58ea9.png" width="3%" alt="" /></a>
-  <img src="https://user-images.githubusercontent.com/25839884/218346358-56cc8e2f-a2b8-487f-9088-32480cceabcf.png" width="3%" alt="" />
-  <a href="https://twitter.com/OpenMMLab" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/218346637-d30c8a0f-3eba-4699-8131-512fb06d46db.png" width="3%" alt="" /></a>
-  <img src="https://user-images.githubusercontent.com/25839884/218346358-56cc8e2f-a2b8-487f-9088-32480cceabcf.png" width="3%" alt="" />
-  <a href="https://www.youtube.com/openmmlab" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/218346691-ceb2116a-465a-40af-8424-9f30d2348ca9.png" width="3%" alt="" /></a>
-  <img src="https://user-images.githubusercontent.com/25839884/218346358-56cc8e2f-a2b8-487f-9088-32480cceabcf.png" width="3%" alt="" />
-  <a href="https://space.bilibili.com/1293512903" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/219026751-d7d14cce-a7c9-4e82-9942-8375fca65b99.png" width="3%" alt="" /></a>
-  <img src="https://user-images.githubusercontent.com/25839884/218346358-56cc8e2f-a2b8-487f-9088-32480cceabcf.png" width="3%" alt="" />
-  <a href="https://www.zhihu.com/people/openmmlab" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/219026120-ba71e48b-6e94-4bd4-b4e9-b7d175b5e362.png" width="3%" alt="" /></a>
-</div>
-
-## Introduction
-
-MMDetection3D is an open source object detection toolbox based on PyTorch, towards the next-generation platform for general 3D detection. It is a part of the [OpenMMLab](https://openmmlab.com/) project.
-
-The main branch works with **PyTorch 1.8+**.
-
-![demo image](resources/mmdet3d_outdoor_demo.gif)
-
-<details open>
-<summary>Major features</summary>
-
-- **Support multi-modality/single-modality detectors out of box**
-
-  It directly supports multi-modality/single-modality detectors including MVXNet, VoteNet, PointPillars, etc.
-
-- **Support indoor/outdoor 3D detection out of box**
-
-  It directly supports popular indoor and outdoor 3D detection datasets, including ScanNet, SUNRGB-D, Waymo, nuScenes, Lyft, and KITTI. For nuScenes dataset, we also support [nuImages dataset](https://github.com/open-mmlab/mmdetection3d/tree/main/configs/nuimages).
-
-- **Natural integration with 2D detection**
-
-  All the about **300+ models, methods of 40+ papers**, and modules supported in [MMDetection](https://github.com/open-mmlab/mmdetection/blob/3.x/docs/en/model_zoo.md) can be trained or used in this codebase.
-
-- **High efficiency**
-
-  It trains faster than other codebases. The main results are as below. Details can be found in [benchmark.md](./docs/en/notes/benchmarks.md). We compare the number of samples trained per second (the higher, the better). The models that are not supported by other codebases are marked by `✗`.
-
-  |       Methods       | MMDetection3D | [OpenPCDet](https://github.com/open-mmlab/OpenPCDet) | [votenet](https://github.com/facebookresearch/votenet) | [Det3D](https://github.com/poodarchu/Det3D) |
-  | :-----------------: | :-----------: | :--------------------------------------------------: | :----------------------------------------------------: | :-----------------------------------------: |
-  |       VoteNet       |      358      |                          ✗                           |                           77                           |                      ✗                      |
-  |  PointPillars-car   |      141      |                          ✗                           |                           ✗                            |                     140                     |
-  | PointPillars-3class |      107      |                          44                          |                           ✗                            |                      ✗                      |
-  |       SECOND        |      40       |                          30                          |                           ✗                            |                      ✗                      |
-  |       Part-A2       |      17       |                          14                          |                           ✗                            |                      ✗                      |
-
-</details>
-
-Like [MMDetection](https://github.com/open-mmlab/mmdetection) and [MMCV](https://github.com/open-mmlab/mmcv), MMDetection3D can also be used as a library to support different projects on top of it.
-
-## What's New
-
-### Highlight
-
-In version 1.4, MMDetecion3D refactors the Waymo dataset and accelerates the preprocessing, training/testing setup, and evaluation of Waymo dataset. We also extends the support for camera-based, such as Monocular and BEV, 3D object detection models on Waymo. A detailed description of the Waymo data information is provided [here](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/datasets/waymo.html).
-
-Besides, in version 1.4, MMDetection3D provides [Waymo-mini](https://download.openmmlab.com/mmdetection3d/data/waymo_mmdet3d_after_1x4/waymo_mini.tar.gz) to help community users get started with Waymo and use it for quick iterative development.
-
-**v1.4.0** was released in 8/1/2024：
-
-- Support the training of [DSVT](<(https://arxiv.org/abs/2301.06051)>) in `projects`
-- Support [Nerf-Det](https://arxiv.org/abs/2307.14620) in `projects`
-- Refactor Waymo dataset
-
-**v1.3.0** was released in 18/10/2023:
-
-- Support [CENet](https://arxiv.org/abs/2207.12691) in `projects`
-- Enhance demos with new 3D inferencers
-
-**v1.2.0** was released in 4/7/2023
-
-- Support [New Config Type](https://mmengine.readthedocs.io/en/latest/advanced_tutorials/config.html#a-pure-python-style-configuration-file-beta) in `mmdet3d/configs`
-- Support the inference of [DSVT](<(https://arxiv.org/abs/2301.06051)>) in `projects`
-- Support downloading datasets from [OpenDataLab](https://opendatalab.com/) using `mim`
-
-**v1.1.1** was released in 30/5/2023:
-
-- Support [TPVFormer](https://arxiv.org/pdf/2302.07817.pdf) in `projects`
-- Support the training of BEVFusion in `projects`
-- Support lidar-based 3D semantic segmentation benchmark
-
-## Installation
-
-Please refer to [Installation](https://mmdetection3d.readthedocs.io/en/latest/get_started.html) for installation instructions.
-
-## Getting Started
-
-For detailed user guides and advanced guides, please refer to our [documentation](https://mmdetection3d.readthedocs.io/en/latest/):
-
-<details>
-<summary>User Guides</summary>
-
-- [Train & Test](https://mmdetection3d.readthedocs.io/en/latest/user_guides/index.html#train-test)
-  - [Learn about Configs](https://mmdetection3d.readthedocs.io/en/latest/user_guides/config.html)
-  - [Coordinate System](https://mmdetection3d.readthedocs.io/en/latest/user_guides/coord_sys_tutorial.html)
-  - [Dataset Preparation](https://mmdetection3d.readthedocs.io/en/latest/user_guides/dataset_prepare.html)
-  - [Customize Data Pipelines](https://mmdetection3d.readthedocs.io/en/latest/user_guides/data_pipeline.html)
-  - [Test and Train on Standard Datasets](https://mmdetection3d.readthedocs.io/en/latest/user_guides/train_test.html)
-  - [Inference](https://mmdetection3d.readthedocs.io/en/latest/user_guides/inference.html)
-  - [Train with Customized Datasets](https://mmdetection3d.readthedocs.io/en/latest/user_guides/new_data_model.html)
-- [Useful Tools](https://mmdetection3d.readthedocs.io/en/latest/user_guides/index.html#useful-tools)
-
-</details>
-
-<details>
-<summary>Advanced Guides</summary>
-
-- [Datasets](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/index.html#datasets)
-  - [KITTI Dataset](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/datasets/kitti.html)
-  - [NuScenes Dataset](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/datasets/nuscenes.html)
-  - [Lyft Dataset](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/datasets/lyft.html)
-  - [Waymo Dataset](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/datasets/waymo.html)
-  - [SUN RGB-D Dataset](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/datasets/sunrgbd.html)
-  - [ScanNet Dataset](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/datasets/scannet.html)
-  - [S3DIS Dataset](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/datasets/s3dis.html)
-  - [SemanticKITTI Dataset](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/datasets/semantickitti.html)
-- [Supported Tasks](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/index.html#supported-tasks)
-  - [LiDAR-Based 3D Detection](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/supported_tasks/lidar_det3d.html)
-  - [Vision-Based 3D Detection](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/supported_tasks/vision_det3d.html)
-  - [LiDAR-Based 3D Semantic Segmentation](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/supported_tasks/lidar_sem_seg3d.html)
-- [Customization](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/index.html#customization)
-  - [Customize Datasets](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/customize_dataset.html)
-  - [Customize Models](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/customize_models.html)
-  - [Customize Runtime Settings](https://mmdetection3d.readthedocs.io/en/latest/advanced_guides/customize_runtime.html)
-
-</details>
-
-## Overview of Benchmark and Model Zoo
-
-Results and models are available in the [model zoo](docs/en/model_zoo.md).
-
-<div align="center">
-  <b>Components</b>
-</div>
-<table align="center">
-  <tbody>
-    <tr align="center" valign="bottom">
-      <td>
-        <b>Backbones</b>
-      </td>
-      <td>
-        <b>Heads</b>
-      </td>
-      <td>
-        <b>Features</b>
-      </td>
-    </tr>
-    <tr valign="top">
-      <td>
-      <ul>
-        <li><a href="configs/pointnet2">PointNet (CVPR'2017)</a></li>
-        <li><a href="configs/pointnet2">PointNet++ (NeurIPS'2017)</a></li>
-        <li><a href="configs/regnet">RegNet (CVPR'2020)</a></li>
-        <li><a href="configs/dgcnn">DGCNN (TOG'2019)</a></li>
-        <li>DLA (CVPR'2018)</li>
-        <li>MinkResNet (CVPR'2019)</li>
-        <li><a href="configs/minkunet">MinkUNet (CVPR'2019)</a></li>
-        <li><a href="configs/cylinder3d">Cylinder3D (CVPR'2021)</a></li>
-      </ul>
-      </td>
-      <td>
-      <ul>
-        <li><a href="configs/free_anchor">FreeAnchor (NeurIPS'2019)</a></li>
-      </ul>
-      </td>
-      <td>
-      <ul>
-        <li><a href="configs/dynamic_voxelization">Dynamic Voxelization (CoRL'2019)</a></li>
-      </ul>
-      </td>
-    </tr>
-</td>
-    </tr>
-  </tbody>
-</table>
-
-<div align="center">
-  <b>Architectures</b>
-</div>
-<table align="center">
-  <tbody>
-    <tr align="center" valign="middle">
-      <td>
-        <b>LiDAR-based 3D Object Detection</b>
-      </td>
-      <td>
-        <b>Camera-based 3D Object Detection</b>
-      </td>
-      <td>
-        <b>Multi-modal 3D Object Detection</b>
-      </td>
-      <td>
-        <b>3D Semantic Segmentation</b>
-      </td>
-    </tr>
-    <tr valign="top">
-      <td>
-        <li><b>Outdoor</b></li>
-        <ul>
-            <li><a href="configs/second">SECOND (Sensor'2018)</a></li>
-            <li><a href="configs/pointpillars">PointPillars (CVPR'2019)</a></li>
-            <li><a href="configs/ssn">SSN (ECCV'2020)</a></li>
-            <li><a href="configs/3dssd">3DSSD (CVPR'2020)</a></li>
-            <li><a href="configs/sassd">SA-SSD (CVPR'2020)</a></li>
-            <li><a href="configs/point_rcnn">PointRCNN (CVPR'2019)</a></li>
-            <li><a href="configs/parta2">Part-A2 (TPAMI'2020)</a></li>
-            <li><a href="configs/centerpoint">CenterPoint (CVPR'2021)</a></li>
-            <li><a href="configs/pv_rcnn">PV-RCNN (CVPR'2020)</a></li>
-            <li><a href="projects/CenterFormer">CenterFormer (ECCV'2022)</a></li>
-        </ul>
-        <li><b>Indoor</b></li>
-        <ul>
-            <li><a href="configs/votenet">VoteNet (ICCV'2019)</a></li>
-            <li><a href="configs/h3dnet">H3DNet (ECCV'2020)</a></li>
-            <li><a href="configs/groupfree3d">Group-Free-3D (ICCV'2021)</a></li>
-            <li><a href="configs/fcaf3d">FCAF3D (ECCV'2022)</a></li>
-            <li><a href="projects/TR3D">TR3D (ArXiv'2023)</a></li>
-      </ul>
-      </td>
-      <td>
-        <li><b>Outdoor</b></li>
-        <ul>
-          <li><a href="configs/imvoxelnet">ImVoxelNet (WACV'2022)</a></li>
-          <li><a href="configs/smoke">SMOKE (CVPRW'2020)</a></li>
-          <li><a href="configs/fcos3d">FCOS3D (ICCVW'2021)</a></li>
-          <li><a href="configs/pgd">PGD (CoRL'2021)</a></li>
-          <li><a href="configs/monoflex">MonoFlex (CVPR'2021)</a></li>
-          <li><a href="projects/DETR3D">DETR3D (CoRL'2021)</a></li>
-          <li><a href="projects/PETR">PETR (ECCV'2022)</a></li>
-        </ul>
-        <li><b>Indoor</b></li>
-        <ul>
-          <li><a href="configs/imvoxelnet">ImVoxelNet (WACV'2022)</a></li>
-        </ul>
-      </td>
-      <td>
-        <li><b>Outdoor</b></li>
-        <ul>
-          <li><a href="configs/mvxnet">MVXNet (ICRA'2019)</a></li>
-          <li><a href="projects/BEVFusion">BEVFusion (ICRA'2023)</a></li>
-        </ul>
-        <li><b>Indoor</b></li>
-        <ul>
-          <li><a href="configs/imvotenet">ImVoteNet (CVPR'2020)</a></li>
-        </ul>
-      </td>
-      <td>
-        <li><b>Outdoor</b></li>
-        <ul>
-          <li><a href="configs/minkunet">MinkUNet (CVPR'2019)</a></li>
-          <li><a href="configs/spvcnn">SPVCNN (ECCV'2020)</a></li>
-          <li><a href="configs/cylinder3d">Cylinder3D (CVPR'2021)</a></li>
-          <li><a href="projects/TPVFormer">TPVFormer (CVPR'2023)</a></li>
-        </ul>
-        <li><b>Indoor</b></li>
-        <ul>
-          <li><a href="configs/pointnet2">PointNet++ (NeurIPS'2017)</a></li>
-          <li><a href="configs/paconv">PAConv (CVPR'2021)</a></li>
-          <li><a href="configs/dgcnn">DGCNN (TOG'2019)</a></li>
-        </ul>
-      </ul>
-      </td>
-    </tr>
-</td>
-    </tr>
-  </tbody>
-</table>
-
-|               | ResNet | VoVNet | Swin-T | PointNet++ | SECOND | DGCNN | RegNetX | DLA | MinkResNet | Cylinder3D | MinkUNet |
-| :-----------: | :----: | :----: | :----: | :--------: | :----: | :---: | :-----: | :-: | :--------: | :--------: | :------: |
-|    SECOND     |   ✗    |   ✗    |   ✗    |     ✗      |   ✓    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-| PointPillars  |   ✗    |   ✗    |   ✗    |     ✗      |   ✓    |   ✗   |    ✓    |  ✗  |     ✗      |     ✗      |    ✗     |
-|  FreeAnchor   |   ✗    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✓    |  ✗  |     ✗      |     ✗      |    ✗     |
-|    VoteNet    |   ✗    |   ✗    |   ✗    |     ✓      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|    H3DNet     |   ✗    |   ✗    |   ✗    |     ✓      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|     3DSSD     |   ✗    |   ✗    |   ✗    |     ✓      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|    Part-A2    |   ✗    |   ✗    |   ✗    |     ✗      |   ✓    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|    MVXNet     |   ✓    |   ✗    |   ✗    |     ✗      |   ✓    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|  CenterPoint  |   ✗    |   ✗    |   ✗    |     ✗      |   ✓    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|      SSN      |   ✗    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✓    |  ✗  |     ✗      |     ✗      |    ✗     |
-|   ImVoteNet   |   ✓    |   ✗    |   ✗    |     ✓      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|    FCOS3D     |   ✓    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|  PointNet++   |   ✗    |   ✗    |   ✗    |     ✓      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-| Group-Free-3D |   ✗    |   ✗    |   ✗    |     ✓      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|  ImVoxelNet   |   ✓    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|    PAConv     |   ✗    |   ✗    |   ✗    |     ✓      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|     DGCNN     |   ✗    |   ✗    |   ✗    |     ✗      |   ✗    |   ✓   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|     SMOKE     |   ✗    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✓  |     ✗      |     ✗      |    ✗     |
-|      PGD      |   ✓    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|   MonoFlex    |   ✗    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✓  |     ✗      |     ✗      |    ✗     |
-|    SA-SSD     |   ✗    |   ✗    |   ✗    |     ✗      |   ✓    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|    FCAF3D     |   ✗    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✗  |     ✓      |     ✗      |    ✗     |
-|    PV-RCNN    |   ✗    |   ✗    |   ✗    |     ✗      |   ✓    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|  Cylinder3D   |   ✗    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✓      |    ✗     |
-|   MinkUNet    |   ✗    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✓     |
-|    SPVCNN     |   ✗    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✓     |
-|   BEVFusion   |   ✗    |   ✗    |   ✓    |     ✗      |   ✓    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-| CenterFormer  |   ✗    |   ✗    |   ✗    |     ✗      |   ✓    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|     TR3D      |   ✗    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✗  |     ✓      |     ✗      |    ✗     |
-|    DETR3D     |   ✓    |   ✓    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|     PETR      |   ✗    |   ✓    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-|   TPVFormer   |   ✓    |   ✗    |   ✗    |     ✗      |   ✗    |   ✗   |    ✗    |  ✗  |     ✗      |     ✗      |    ✗     |
-
-**Note:** All the about **500+ models, methods of 90+ papers** in 2D detection supported by [MMDetection](https://github.com/open-mmlab/mmdetection/blob/3.x/docs/en/model_zoo.md) can be trained or used in this codebase.
-
-## FAQ
-
-Please refer to [FAQ](docs/en/notes/faq.md) for frequently asked questions.
-
-## Contributing
-
-We appreciate all contributions to improve MMDetection3D. Please refer to [CONTRIBUTING.md](docs/en/notes/contribution_guides.md) for the contributing guideline.
-
-## Acknowledgement
-
-MMDetection3D is an open source project that is contributed by researchers and engineers from various colleges and companies. We appreciate all the contributors as well as users who give valuable feedbacks. We wish that the toolbox and benchmark could serve the growing research community by providing a flexible toolkit to reimplement existing methods and develop their own new 3D detectors.
-
-## Citation
-
-If you find this project useful in your research, please consider cite:
-
-```latex
-@misc{mmdet3d2020,
-    title={{MMDetection3D: OpenMMLab} next-generation platform for general {3D} object detection},
-    author={MMDetection3D Contributors},
-    howpublished = {\url{https://github.com/open-mmlab/mmdetection3d}},
-    year={2020}
-}
+    # Create the distillation trainer
+    trainer = FinalDistillationTrainer(
+        teacher_config_path=args.teacher_config,
+        student_config_path=args.student_config,
+        teacher_checkpoint=args.teacher_checkpoint
+    )
 ```
 
-## License
+## 2. Trainer Initialization
 
-This project is released under the [Apache 2.0 license](LICENSE).
-
-## Projects in OpenMMLab
-
-- [MMEngine](https://github.com/open-mmlab/mmengine): OpenMMLab foundational library for training deep learning models.
-- [MMCV](https://github.com/open-mmlab/mmcv): OpenMMLab foundational library for computer vision.
-- [MMEval](https://github.com/open-mmlab/mmeval): A unified evaluation library for multiple machine learning libraries.
-- [MIM](https://github.com/open-mmlab/mim): MIM installs OpenMMLab packages.
-- [MMPreTrain](https://github.com/open-mmlab/mmpretrain): OpenMMLab pre-training toolbox and benchmark.
-- [MMDetection](https://github.com/open-mmlab/mmdetection): OpenMMLab detection toolbox and benchmark.
-- [MMDetection3D](https://github.com/open-mmlab/mmdetection3d): OpenMMLab's next-generation platform for general 3D object detection.
-- [MMRotate](https://github.com/open-mmlab/mmrotate): OpenMMLab rotated object detection toolbox and benchmark.
-- [MMYOLO](https://github.com/open-mmlab/mmyolo): OpenMMLab YOLO series toolbox and benchmark.
-- [MMSegmentation](https://github.com/open-mmlab/mmsegmentation): OpenMMLab semantic segmentation toolbox and benchmark.
-- [MMOCR](https://github.com/open-mmlab/mmocr): OpenMMLab text detection, recognition, and understanding toolbox.
-- [MMPose](https://github.com/open-mmlab/mmpose): OpenMMLab pose estimation toolbox and benchmark.
-- [MMHuman3D](https://github.com/open-mmlab/mmhuman3d): OpenMMLab 3D human parametric model toolbox and benchmark.
-- [MMSelfSup](https://github.com/open-mmlab/mmselfsup): OpenMMLab self-supervised learning toolbox and benchmark.
-- [MMRazor](https://github.com/open-mmlab/mmrazor): OpenMMLab model compression toolbox and benchmark.
-- [MMFewShot](https://github.com/open-mmlab/mmfewshot): OpenMMLab fewshot learning toolbox and benchmark.
-- [MMAction2](https://github.com/open-mmlab/mmaction2): OpenMMLab's next-generation action understanding toolbox and benchmark.
-- [MMTracking](https://github.com/open-mmlab/mmtracking): OpenMMLab video perception toolbox and benchmark.
-- [MMFlow](https://github.com/open-mmlab/mmflow): OpenMMLab optical flow toolbox and benchmark.
-- [MMagic](https://github.com/open-mmlab/mmagic): Open**MM**Lab **A**dvanced, **G**enerative and **I**ntelligent **C**reation toolbox.
-- [MMGeneration](https://github.com/open-mmlab/mmgeneration): OpenMMLab image and video generative models toolbox.
-- [MMDeploy](https://github.com/open-mmlab/mmdeploy): OpenMMLab model deployment framework.
-
-# BEVFusion Implementation and Validation
-
-This repository contains our implementation and validation of the BEVFusion model on the NuScenes dataset. We followed the original MMDetection3D codebase and added custom validation and visualization tools.
-
-## Table of Contents
-- [Environment Setup](#environment-setup)
-- [Dataset Preparation](#dataset-preparation)
-- [Training](#training)
-- [Validation](#validation)
-- [Results](#results)
-- [Visualization Tools](#visualization-tools)
-- [Directory Structure](#directory-structure)
-
-## Environment Setup
-
-1. Create and activate conda environment:
-```bash
-conda create -n bevfusion python=3.8 -y
-conda activate bevfusion
+```python
+# Inside FinalDistillationTrainer.__init__
+# INTEGRATION POINT 1: BEVFusion models are loaded and wrapped
+self.teacher_wrapper, self.student_wrapper, self.distill_criterion = build_bevfusion_distillation(
+    teacher_config_path=teacher_config_path,
+    student_config_path=student_config_path,
+    teacher_checkpoint=teacher_checkpoint,
+    n_data=1000,
+    device=self.device
+)
 ```
 
-2. Install PyTorch and MMCV:
-```bash
-pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html
-pip install mmcv-full==1.4.0 -f https://download.openmmlab.com/mmcv/dist/cu111/torch1.9.0/index.html
+## 3. Model Building (in build_bevfusion_distillation)
+
+```python
+# Load configs and build BEVFusion models
+teacher_config = Config.fromfile(teacher_config_path)
+student_config = Config.fromfile(student_config_path)
+
+# INTEGRATION POINT 2: BEVFusion teacher model created
+teacher_model = MODELS.build(teacher_config.model)
+# Load teacher checkpoint and freeze weights
+
+# INTEGRATION POINT 3: BEVFusion student model created  
+student_model = MODELS.build(student_config.model)
+
+# INTEGRATION POINT 4: BEVFusion models are wrapped for feature extraction
+teacher_wrapper = BEVFusionDistillationWrapper(teacher_model, is_student=False)
+student_wrapper = BEVFusionDistillationWrapper(student_model, is_student=True)
+
+# INTEGRATION POINT 5: Create distillation loss for BEVFusion features
+distill_criterion = BEVFusionDistillationLoss(
+    student_channels=student_channels,
+    teacher_channels=teacher_channels,
+    # CRD parameters...
+)
 ```
 
-3. Install MMDetection3D:
-```bash
-pip install -v -e .
+## 4. Training Loop
+
+```python
+# Loop through dataset and epochs
+for epoch in range(start_epoch, num_epochs):
+    for batch_idx, data_batch in enumerate(dataloader):
+        # Process each batch with train_step
+        losses = trainer.train_step(data_batch)
 ```
 
-## Dataset Preparation
+## 5. Training Step (Single Batch)
 
-1. Download NuScenes dataset:
-```bash
-# Download mini dataset for testing
-wget https://www.nuscenes.org/data/v1.0-mini.tgz
-tar -xf v1.0-mini.tgz
+```python
+# Inside train_step method of FinalDistillationTrainer
+def train_step(self, data_batch):
+    # Validate and fix data format
+    data_batch = self.validate_and_fix_data(data_batch)
+    
+    # INTEGRATION POINT 6: Get features from BEVFusion teacher model
+    with torch.no_grad():
+        teacher_loss, teacher_features = self.teacher_wrapper(batch_inputs_dict, batch_data_samples, mode='loss')
+    
+    # INTEGRATION POINT 7: Get features from BEVFusion student model
+    student_loss, student_features = self.student_wrapper(batch_inputs_dict, batch_data_samples, mode='loss')
+    
+    # Calculate task loss from student model's output
+    task_loss = sum(v for k, v in student_loss.items() if 'loss' in k)
+    
+    # INTEGRATION POINT 8: Compute CRD distillation loss using BEVFusion features
+    indices = torch.randint(0, 1000, (batch_size,), device=self.device)
+    distill_losses = self.distill_criterion(student_features, teacher_features, indices)
+    distill_loss = distill_losses.get('total_distill', torch.tensor(0.0, device=self.device))
+    
+    # Combine losses and backpropagate
+    total_loss = task_loss + alpha_distill * distill_loss
+    total_loss.backward()
+    
+    # Update student model parameters
+    self.optimizer.step()
 ```
 
-2. Create dataset info:
-```bash
-python tools/create_data.py nuscenes --root-path data/nuscenes --out-dir data/nuscenes --extra-tag nuscenes
+## 6. Under the Hood: Feature Extraction
+
+During both teacher_wrapper and student_wrapper forward passes:
+
+```python
+# In BEVFusionDistillationWrapper.forward
+# The underlying BEVFusion model is called
+if mode == 'loss':
+    result = self.model.loss(batch_inputs_dict, batch_data_samples)
+else:
+    result = self.model.predict(batch_inputs_dict, batch_data_samples)
+
+# Meanwhile, registered hooks capture features during the forward pass
+def _get_activation_hook(self, name):
+    def hook(module, input, output):
+        # Store output features in self.features dictionary
+        self.features[name] = output
 ```
 
-## Training
+## 7. Under the Hood: Distillation Loss Computation
 
-1. Train BEVFusion model:
-```bash
-python tools/train.py projects/BEVFusion/configs/bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py
+When the distill_criterion is called:
+
+```python
+# In BEVFusionDistillationLoss.forward
+for layer_name in student_features.keys():
+    if layer_name in teacher_features and layer_name in self.crd_losses:
+        # Get features for this layer from both models
+        s_feat = student_features[layer_name]  # From student BEVFusion
+        t_feat = teacher_features[layer_name]  # From teacher BEVFusion
+        
+        # INTEGRATION POINT 9: Call CRD loss for this specific layer's features
+        crd_loss = self.crd_losses[layer_name](s_feat, t_feat, indices)
+        weighted_loss = self.alpha_crd * crd_loss
+        losses[f'{layer_name}_crd'] = weighted_loss
+        total_loss += weighted_loss
 ```
 
-Training configuration:
-- Model: BEVFusion (LiDAR + Camera)
-- Dataset: NuScenes
-- Epochs: 20
-- Batch size: 4
-- Learning rate: 2e-4
-- Optimizer: AdamW
-- Scheduler: CyclicLR
+## 8. Under the Hood: CRD Loss Computation
 
-## Validation
+Inside each CRDLoss module's forward call:
 
-1. Run validation:
-```bash
-python tools/test.py projects/BEVFusion/configs/bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py work_dirs/bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d/latest.pth
+```python
+# In CRDLoss.forward
+# Project features to embedding space
+f_s = self.embed_s(f_s)  # Student features
+f_t = self.embed_t(f_t)  # Teacher features
+
+# Compute contrastive loss using memory bank
+out_s, out_t = self.contrast(f_s, f_t, idx)
+s_loss = self.criterion_s(out_s)
+t_loss = self.criterion_t(out_t)
+loss = s_loss + t_loss
 ```
 
-2. Generate metrics tables and visualizations:
-```bash
-python metrics_to_table.py
-python visualize_all_metrics.py
-python plot_nds_map_over_time.py
+## 9. Model Saving & Evaluation
+
+```python
+# After certain epochs or batches
+if epoch % save_interval == 0:
+    # Save model checkpoint
+    ckpt_path = os.path.join(work_dir, f'epoch_{epoch}.pth')
+    save_checkpoint(...)
+    
+    # Optionally evaluate model
+    # ...
 ```
 
-## Results
-
-### Main Metrics
-| Metric | Value |
-|--------|-------|
-| NDS    | 0.56  |
-| mAP    | 0.54  |
-| mATE   | 0.24  |
-| mASE   | 0.29  |
-| mAOE   | 0.46  |
-| mAVE   | 0.71  |
-| mAAE   | 0.40  |
-
-### Per-Class APs (at 0.5m)
-| Class      | AP@0.5m |
-|------------|---------|
-| car        | 0.57    |
-| truck      | 0.60    |
-| pedestrian | 0.84    |
-| ...        | ...     |
-
-Visualization results are available in:
-- `20250523_200838_main_metrics.png`
-- `20250523_200838_per_class_APs.png`
-- `mAP_NDS_over_time.png`
-
-## Visualization Tools
-
-We created several custom visualization tools:
-
-1. `visualize_all_metrics.py`: Generates bar charts for all metrics
-2. `metrics_to_table.py`: Creates CSV tables of metrics
-3. `plot_nds_map_over_time.py`: Plots training progress
-4. `visualize_predictions.py`: Visualizes model predictions on sample data
-
-## Directory Structure
-
-```
-.
-├── work_dirs/                           # Training outputs and checkpoints
-│   └── bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d/
-│       └── 20250523_200838/            # Latest training run
-│           ├── 20250523_200838.json    # Validation metrics
-│           └── latest.pth              # Model checkpoint
-├── data/                               # Dataset directory
-│   └── nuscenes/                      # NuScenes dataset
-├── projects/                          # Model configurations
-│   └── BEVFusion/
-│       └── configs/                   # Training and test configs
-├── tools/                            # Training and testing scripts
-├── visualization_results/            # Generated visualizations
-└── *.py                             # Custom visualization scripts
-```
-
-## Custom Scripts
-
-1. `metrics_to_table.py`: Converts JSON metrics to CSV tables
-2. `visualize_all_metrics.py`: Creates bar charts of metrics
-3. `plot_nds_map_over_time.py`: Plots training progress
-4. `visualize_predictions.py`: Visualizes model predictions
-
-## Citation
-
-If you use this implementation, please cite:
-```bibtex
-@inproceedings{liu2022bevfusion,
-  title={BEVFusion: Multi-Task Multi-Sensor Fusion with Unified Bird's-Eye View Representation},
-  author={Liu, Zhijian and Tang, Haotian and Amini, Alexander and Yang, Xingyu and Mao, Huizi and Rus, Daniela and Han, Song},
-  booktitle={IEEE International Conference on Robotics and Automation (ICRA)},
-  year={2023}
-}
-```
-
-## License
-
-This project is released under the [Apache 2.0 license](LICENSE).
+This workflow shows how BEVFusion models are wrapped, how features are extracted during forward passes, and how these features are fed into the CRD distillation framework to calculate the distillation loss that guides the student's training.
