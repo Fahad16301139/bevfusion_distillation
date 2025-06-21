@@ -226,7 +226,7 @@ class CRDLoss(nn.Module):
 
 ### 🚗 **3. BEVFusion Adaptation - Key Changes**
 
-Now let me show you the major adaptations needed for BEVFusion:
+ the major adaptations needed for BEVFusion:
 Read file: bevfusion_distillation.py
 #### 🔧 **Major Adaptations for BEVFusion:**
 
@@ -372,4 +372,4 @@ This is especially powerful for 3D detection because:
 
 The key insight is that for complex tasks like 3D detection, **intermediate feature alignment** (CRD) is more effective than just **output alignment** (traditional KD).
 
-Would you like me to dive deeper into any specific part of this adaptation?
+
